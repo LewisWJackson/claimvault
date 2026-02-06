@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Creator {
+  id                 String   @id @default(cuid())
+  youtubeChannelId   String   @unique
+  channelHandle      String?
+  channelName        String
+  channelUrl         String
+  avatarUrl          String?
+  bannerUrl          String?
+  subscriberCount    Int      @default(0)
+  description        String?
+  primaryNiche       String   @default("XRP")
+  trackingSince      DateTime @default(now())
+  isActive           Boolean  @default(true)
+  overallAccuracy    Float    @default(0)
+  totalClaims        Int      @default(0)
+  verifiedTrue       Int      @default(0)
+  verifiedFalse      Int      @default(0)
+  pendingClaims      Int      @default(0)
+  tier               String   @default("unranked")
+  rankOverall        Int?
+  rankChange         Int      @default(0)
+  currentStance      String?
+  currentSentiment   String   @default("neutral")
+
+  // Radar chart scores (0-100)
+  priceAccuracy      Float    @default(0)
+  timelineAccuracy   Float    @default(0)
+  regulatoryAccuracy Float    @default(0)
+  partnershipAccuracy Float   @default(0)
+  technologyAccuracy Float    @default(0)
+  marketAccuracy     Float    @default(0)
+
+  videos             Video[]
+  claims             Claim[]
+  scores             CreatorScore[]
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Video {
+  id                 String   @id @default(cuid())
+  creatorId          String
+  youtubeVideoId     String   @unique
+  title              String
+  description        String?
+  publishedAt        DateTime
+  durationSeconds    Int      @default(0)
+  viewCount          Int      @default(0)
+  thumbnailUrl       String?
+  transcriptStatus   String   @default("pending")
+  transcriptText     String?
+  transcriptSource   String?
+  claimsExtracted    Boolean  @default(false)
+
+  creator            Creator  @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  claims             Claim[]
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Claim {
+  id                    String    @id @default(cuid())
+  creatorId             String
+  videoId               String
+  claimText             String
+  category              String
+  specificityScore      Float     @default(5)
+  confidenceLanguage    String    @default("moderate")
+  statedTimeframe       String?
+  timeframeDeadline     DateTime?
+  isVerifiable          Boolean   @default(true)
+  videoTimestampSeconds Int       @default(0)
+  status                String    @default("pending")
+  verificationDate      DateTime?
+  verificationEvidence  String?
+  verificationNotes     String?
+  aiExtractionConfidence Float    @default(0.8)
+
+  creator               Creator   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  video                 Video     @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model CreatorScore {
+  id                 String   @id @default(cuid())
+  creatorId          String
+  calculatedAt       DateTime @default(now())
+  overallAccuracy    Float
+  priceAccuracy      Float
+  timelineAccuracy   Float
+  regulatoryAccuracy Float
+  partnershipAccuracy Float
+  technologyAccuracy Float
+  marketAccuracy     Float
+  totalClaimsScored  Int
+  claimsPending      Int
+  rankOverall        Int
+  rankChange         Int      @default(0)
+
+  creator            Creator  @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+}
+
+model Suggestion {
+  id           String   @id @default(cuid())
+  channelUrl   String
+  channelName  String?
+  submitterNote String?
+  status       String   @default("pending")
+  createdAt    DateTime @default(now())
+}
