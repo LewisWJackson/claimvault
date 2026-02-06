@@ -1,12 +1,12 @@
 FROM node:20-alpine AS base
 
-# Install dependencies only when needed
+# Install ALL dependencies (dev included) for the build step
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci --omit=dev
+RUN npm ci
 
-# Rebuild the source code only when needed
+# Build the source code
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
