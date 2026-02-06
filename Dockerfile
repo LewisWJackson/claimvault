@@ -35,6 +35,6 @@ USER nextjs
 
 EXPOSE 3000
 ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+# Force bind to 0.0.0.0 at startup — Railway/Docker can override HOSTNAME env var
+CMD HOSTNAME=0.0.0.0 node server.js
