@@ -14,7 +14,7 @@ import ClaimCard from '@/components/ClaimCard';
 import { getStatusColor, getStatusLabel, getCategoryColor } from '@/lib/types';
 import { getAllCreators, getClaimsByCreator, getVideosByCreator, getClaimsWithCreators } from '@/lib/db';
 
-type FilterStatus = 'all' | 'pending' | 'verified_true' | 'verified_false' | 'partially_true';
+type FilterStatus = 'all' | 'verified_true' | 'verified_false' | 'partially_true' | 'expired' | 'unverifiable';
 type FilterCategory = 'all' | 'price' | 'timeline' | 'regulatory' | 'partnership' | 'technology' | 'market';
 
 export default function CreatorProfilePage() {
@@ -146,9 +146,9 @@ export default function CreatorProfilePage() {
                 <div className="text-lg font-semibold text-red-400">{creator.verifiedFalse}</div>
               </div>
               <div className="glass-card-sm p-3 text-center">
-                <Clock className="w-4 h-4 text-blue-400 mx-auto mb-1" />
-                <div className="text-xs text-white/40">Pending</div>
-                <div className="text-lg font-semibold text-blue-400">{creator.pendingClaims}</div>
+                <AlertCircle className="w-4 h-4 text-amber-400 mx-auto mb-1" />
+                <div className="text-xs text-white/40">Partial</div>
+                <div className="text-lg font-semibold text-amber-400">{creator.partiallyTrue ?? 0}</div>
               </div>
             </div>
 
@@ -183,7 +183,7 @@ export default function CreatorProfilePage() {
 
           <div className="flex flex-wrap gap-2">
             {/* Status filter */}
-            {(['all', 'pending', 'verified_true', 'verified_false', 'partially_true'] as const).map(s => (
+            {(['all', 'verified_true', 'verified_false', 'partially_true', 'expired', 'unverifiable'] as const).map(s => (
               <button key={s} onClick={() => setStatusFilter(s)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   statusFilter === s

@@ -65,8 +65,8 @@ export default function HomePage() {
             <div className="text-xl font-semibold text-red-400">{pulse.verifiedFalse}</div>
           </div>
           <div className="glass-card-sm p-3 text-center">
-            <div className="text-xs text-blue-400/60 mb-1">Pending</div>
-            <div className="text-xl font-semibold text-blue-400">{pulse.pendingClaims}</div>
+            <div className="text-xs text-amber-400/60 mb-1">Partially True</div>
+            <div className="text-xl font-semibold text-amber-400">{pulse.partiallyTrue}</div>
           </div>
           <div className="glass-card-sm p-3 text-center">
             <div className="text-xs text-emerald-400/60 mb-1">Bullish</div>

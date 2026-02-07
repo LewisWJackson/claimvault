@@ -67,11 +67,35 @@ const claims: Claim[] = rawClaims.map((c: any) => ({
   specificityScore: c.claimStrength === 'strong' ? 8 : c.claimStrength === 'weak' ? 4 : 6,
 }));
 
-const creators = [...rawCreators];
+// ─── Compute real creator stats from actual claims ──────────────────────────
+
+function computeCreatorStats(creatorId: string) {
+  const creatorClaims = claims.filter(c => c.creatorId === creatorId);
+  const total = creatorClaims.length;
+  const verifiedTrue = creatorClaims.filter(c => c.status === 'verified_true').length;
+  const verifiedFalse = creatorClaims.filter(c => c.status === 'verified_false').length;
+  const partiallyTrue = creatorClaims.filter(c => c.status === 'partially_true').length;
+  const expired = creatorClaims.filter(c => c.status === 'expired').length;
+  const unverifiable = creatorClaims.filter(c => c.status === 'unverifiable').length;
+  const pending = creatorClaims.filter(c => c.status === 'pending').length;
+
+  // Accuracy: (true + 0.5 * partial) / (true + false + partial + expired)
+  const scoreable = verifiedTrue + verifiedFalse + partiallyTrue + expired;
+  const accuracy = scoreable > 0
+    ? Math.round(((verifiedTrue + partiallyTrue * 0.5) / scoreable) * 100 * 10) / 10
+    : 0;
+
+  return { totalClaims: total, verifiedTrue, verifiedFalse, partiallyTrue, expired, unverifiable, pendingClaims: pending, overallAccuracy: accuracy };
+}
+
+const creators = rawCreators.map(c => {
+  const stats = computeCreatorStats(c.id);
+  return { ...c, ...stats };
+});
 
 // ─── Creator queries ──────────────────────────────────────────────────────────
 
-export function getAllCreators(): Creator[] {
+export function getAllCreators() {
   return [...creators].sort((a, b) => (a.rankOverall ?? 99) - (b.rankOverall ?? 99));
 }
 
@@ -235,9 +259,10 @@ export function getMarketPulse() {
     neutralPercent: Math.round((neutral / total) * 100),
     totalCreators: total,
     totalClaims: claims.length,
-    pendingClaims: claims.filter(c => c.status === 'pending').length,
     verifiedTrue: claims.filter(c => c.status === 'verified_true').length,
     verifiedFalse: claims.filter(c => c.status === 'verified_false').length,
+    partiallyTrue: claims.filter(c => c.status === 'partially_true').length,
+    expired: claims.filter(c => c.status === 'expired').length,
     recentlyVerified: claims
       .filter(c => c.verificationDate)
       .sort((a, b) => new Date(b.verificationDate!).getTime() - new Date(a.verificationDate!).getTime())
