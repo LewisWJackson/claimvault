@@ -30,7 +30,7 @@ export async function scrapeTranscripts(videoUrls: string[]) {
 // ─── Full pipeline: channel URL → video list → transcripts ─────────────────
 export async function processNewCreator(channelHandle: string) {
   // Step 1: Get all videos from the channel
-  console.log(`[ClaimVault] Scraping videos for ${channelHandle}...`);
+  console.log(`[CreatorClaim] Scraping videos for ${channelHandle}...`);
   const videos = await scrapeChannelVideos(channelHandle);
 
   // Step 2: Get transcripts for each video
@@ -39,7 +39,7 @@ export async function processNewCreator(channelHandle: string) {
     .map((v: any) => v.url || v.videoUrl);
 
   if (videoUrls.length === 0) {
-    console.log(`[ClaimVault] No videos found for ${channelHandle}`);
+    console.log(`[CreatorClaim] No videos found for ${channelHandle}`);
     return { videos: [], transcripts: [] };
   }
 
@@ -49,7 +49,7 @@ export async function processNewCreator(channelHandle: string) {
 
   for (let i = 0; i < videoUrls.length; i += batchSize) {
     const batch = videoUrls.slice(i, i + batchSize);
-    console.log(`[ClaimVault] Fetching transcripts batch ${Math.floor(i / batchSize) + 1}...`);
+    console.log(`[CreatorClaim] Fetching transcripts batch ${Math.floor(i / batchSize) + 1}...`);
     const transcripts = await scrapeTranscripts(batch);
     allTranscripts.push(...transcripts);
   }

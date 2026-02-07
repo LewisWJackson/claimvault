@@ -21,7 +21,7 @@ async function evaluateDispute(
     wrong_creator: 'The community member claims this was attributed to the wrong creator',
   };
 
-  const systemPrompt = `You are the AI moderator for ClaimVault, a community-driven crypto claim tracking platform. A community member has disputed a claim. Evaluate their evidence and determine the dispute's validity.
+  const systemPrompt = `You are the AI moderator for CreatorClaim, a community-driven crypto claim tracking platform. A community member has disputed a claim. Evaluate their evidence and determine the dispute's validity.
 
 You must respond with ONLY valid JSON:
 {
@@ -154,7 +154,7 @@ export async function POST(request: Request) {
       });
     }
   } catch (error) {
-    console.error('[ClaimVault] Dispute error:', error);
+    console.error('[CreatorClaim] Dispute error:', error);
     return NextResponse.json(
       { error: 'Failed to process dispute', details: error instanceof Error ? error.message : 'Unknown' },
       { status: 500 },

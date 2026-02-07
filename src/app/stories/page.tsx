@@ -5,8 +5,8 @@ import { Newspaper } from 'lucide-react';
 import StoriesListClient from './StoriesListClient';
 
 export const metadata: Metadata = {
-  title: 'All Stories — ClaimVault',
-  description: 'Browse all crypto news stories tracked by ClaimVault, filtered by category and sorted by relevance.',
+  title: 'All Stories — CreatorClaim',
+  description: 'Browse all crypto news stories tracked by CreatorClaim, filtered by category and sorted by relevance.',
 };
 
 export default function StoriesPage() {

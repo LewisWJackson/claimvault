@@ -21,11 +21,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   } catch {}
 
   if (!story) {
-    return { title: 'Story Not Found — ClaimVault' };
+    return { title: 'Story Not Found — CreatorClaim' };
   }
 
   return {
-    title: `${story.headline} — ClaimVault`,
+    title: `${story.headline} — CreatorClaim`,
     description: story.summary,
   };
 }

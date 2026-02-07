@@ -27,8 +27,8 @@ export default function Navigation() {
               <BarChart3 className="w-5 h-5 text-white" />
             </div>
             <span className="text-lg font-semibold tracking-tight">
-              <span className="text-white">Claim</span>
-              <span className="gradient-text">Vault</span>
+              <span className="text-white">Creator</span>
+              <span className="gradient-text">Claim</span>
             </span>
           </Link>
 

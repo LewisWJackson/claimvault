@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     }
 
     // In production: save to database, trigger Apify scraping
-    console.log('[ClaimVault] New creator suggestion:', { channelUrl, note, timestamp: new Date().toISOString() });
+    console.log('[CreatorClaim] New creator suggestion:', { channelUrl, note, timestamp: new Date().toISOString() });
 
     // TODO: Trigger Apify pipeline
     // const handle = extractHandle(channelUrl);
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
       message: 'Creator suggestion received. We will review and begin tracking shortly.',
     });
   } catch (error) {
-    console.error('[ClaimVault] Suggestion error:', error);
+    console.error('[CreatorClaim] Suggestion error:', error);
     return NextResponse.json({ error: 'Failed to process suggestion' }, { status: 500 });
   }
 }

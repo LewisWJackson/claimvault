@@ -5,7 +5,7 @@ import { Radio, AlertTriangle } from 'lucide-react';
 import EchoChamberCard from '@/components/EchoChamberCard';
 
 export const metadata: Metadata = {
-  title: 'Echo Chambers — ClaimVault',
+  title: 'Echo Chambers — CreatorClaim',
   description: 'Stories where crypto creator coverage is heavily one-sided. Identify blind spots in the narrative.',
 };
 

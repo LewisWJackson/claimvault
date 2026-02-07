@@ -7,7 +7,7 @@ import Link from 'next/link';
 import ValidityBar from '@/components/ValidityBar';
 
 export const metadata: Metadata = {
-  title: 'Categories — ClaimVault',
+  title: 'Categories — CreatorClaim',
   description: 'Browse crypto news stories by category. See validity breakdowns for each topic area.',
 };
 

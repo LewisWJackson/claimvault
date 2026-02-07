@@ -30,34 +30,34 @@ export async function extractClaimsForCreator(
   const creator = getAllCreators().find((c) => c.id === creatorId);
   const channelName = creator?.channelName || creatorId;
 
-  console.log(`[ClaimVault] Extracting claims for ${channelName} (${channelId})...`);
+  console.log(`[CreatorClaim] Extracting claims for ${channelName} (${channelId})...`);
 
   let videoIds: string[];
   try {
     videoIds = await getRecentVideoIds(channelId, limit);
   } catch (err) {
-    console.error(`[ClaimVault] Failed to fetch video IDs for ${channelName}:`, err);
+    console.error(`[CreatorClaim] Failed to fetch video IDs for ${channelName}:`, err);
     return [];
   }
 
   if (videoIds.length === 0) {
-    console.log(`[ClaimVault] No videos found for ${channelName}`);
+    console.log(`[CreatorClaim] No videos found for ${channelName}`);
     return [];
   }
 
-  console.log(`[ClaimVault] Found ${videoIds.length} videos for ${channelName}`);
+  console.log(`[CreatorClaim] Found ${videoIds.length} videos for ${channelName}`);
 
   const results: ExtractedClaimResult[] = [];
 
   for (let i = 0; i < videoIds.length; i++) {
     const videoId = videoIds[i];
-    console.log(`[ClaimVault]   Processing video ${i + 1}/${videoIds.length}: ${videoId}`);
+    console.log(`[CreatorClaim]   Processing video ${i + 1}/${videoIds.length}: ${videoId}`);
 
     try {
       const transcript = await fetchVideoTranscript(videoId);
 
       if (!transcript.text || transcript.text.trim().length < 100) {
-        console.log(`[ClaimVault]   Skipping ${videoId} — transcript too short or empty`);
+        console.log(`[CreatorClaim]   Skipping ${videoId} — transcript too short or empty`);
         results.push({
           creatorId,
           videoId,
@@ -81,10 +81,10 @@ export async function extractClaimsForCreator(
       );
 
       results.push({ creatorId, videoId, videoTitle, videoDate, claims });
-      console.log(`[ClaimVault]   Extracted ${claims.length} claims from ${videoId}`);
+      console.log(`[CreatorClaim]   Extracted ${claims.length} claims from ${videoId}`);
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : 'Unknown error';
-      console.error(`[ClaimVault]   Error processing ${videoId}:`, errMsg);
+      console.error(`[CreatorClaim]   Error processing ${videoId}:`, errMsg);
       results.push({
         creatorId,
         videoId,
@@ -102,7 +102,7 @@ export async function extractClaimsForCreator(
   }
 
   const totalClaims = results.reduce((sum, r) => sum + r.claims.length, 0);
-  console.log(`[ClaimVault] Finished ${channelName}: ${totalClaims} claims from ${results.length} videos`);
+  console.log(`[CreatorClaim] Finished ${channelName}: ${totalClaims} claims from ${results.length} videos`);
 
   return results;
 }
@@ -117,12 +117,12 @@ export async function extractClaimsForAllCreators(
   const creators = getAllCreators();
   const allResults: ExtractedClaimResult[] = [];
 
-  console.log(`[ClaimVault] Starting claim extraction for ${creators.length} creators...`);
+  console.log(`[CreatorClaim] Starting claim extraction for ${creators.length} creators...`);
 
   for (const creator of creators) {
     const channelId = (creator as any).youtubeChannelId;
     if (!channelId) {
-      console.log(`[ClaimVault] Skipping ${creator.channelName} — no channel ID`);
+      console.log(`[CreatorClaim] Skipping ${creator.channelName} — no channel ID`);
       continue;
     }
 
@@ -134,7 +134,7 @@ export async function extractClaimsForAllCreators(
   }
 
   const totalClaims = allResults.reduce((sum, r) => sum + r.claims.length, 0);
-  console.log(`[ClaimVault] Extraction complete: ${totalClaims} total claims from ${allResults.length} videos`);
+  console.log(`[CreatorClaim] Extraction complete: ${totalClaims} total claims from ${allResults.length} videos`);
 
   return allResults;
 }

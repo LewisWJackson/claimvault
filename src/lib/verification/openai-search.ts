@@ -31,7 +31,7 @@ export async function verifyWithWebSearch(
 
   const today = new Date().toISOString().split('T')[0];
 
-  const systemPrompt = `You are a crypto claim verification analyst for ClaimVault. Use the web search tool to find real evidence about crypto claims, then provide a structured verification verdict. Be rigorous — require real evidence, not speculation.
+  const systemPrompt = `You are a crypto claim verification analyst for CreatorClaim. Use the web search tool to find real evidence about crypto claims, then provide a structured verification verdict. Be rigorous — require real evidence, not speculation.
 
 Rules:
 - "verified_true": Clear evidence confirms the claim happened/is happening

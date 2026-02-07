@@ -3,7 +3,7 @@ import './globals.css';
 import Navigation from '@/components/Navigation';
 
 export const metadata: Metadata = {
-  title: 'ClaimVault — Which Crypto YouTubers Can You Trust?',
+  title: 'CreatorClaim — Which Crypto YouTubers Can You Trust?',
   description: 'Track crypto creator predictions and verify them against reality. See who\'s trustworthy and who\'s speculating.',
   keywords: ['XRP', 'crypto', 'YouTube', 'predictions', 'accuracy', 'accountability'],
 };
@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <footer className="relative z-10 border-t border-white/[0.04] py-8 px-4">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-white/30">ClaimVault</span>
+              <span className="text-sm text-white/30">CreatorClaim</span>
               <span className="text-xs text-white/15">|</span>
               <span className="text-xs text-white/20">Crypto Creator Accountability Platform</span>
             </div>

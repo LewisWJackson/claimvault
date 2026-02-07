@@ -77,7 +77,7 @@ function runYtDlp(videoId: string, outputPath: string): Promise<void> {
  * Returns the full transcript text and individual segments with timestamps.
  */
 export async function fetchVideoTranscript(youtubeVideoId: string): Promise<TranscriptResult> {
-  const basePath = join(tmpdir(), `claimvault_${youtubeVideoId}_${Date.now()}`);
+  const basePath = join(tmpdir(), `creatorclaim_${youtubeVideoId}_${Date.now()}`);
   const subPath = `${basePath}.en.srv1`;
 
   try {

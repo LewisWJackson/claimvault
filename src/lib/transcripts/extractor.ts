@@ -34,7 +34,7 @@ export async function extractClaimsFromTranscript(
     ? transcript.substring(0, maxChars) + '\n[TRANSCRIPT TRUNCATED]'
     : transcript;
 
-  const systemPrompt = `You are a crypto claim extraction analyst for ClaimVault, a platform that tracks the accuracy of XRP YouTube creators' predictions and claims.
+  const systemPrompt = `You are a crypto claim extraction analyst for CreatorClaim, a platform that tracks the accuracy of XRP YouTube creators' predictions and claims.
 
 Analyze the transcript and extract specific, verifiable claims. Focus on:
 - Price predictions (specific price targets or ranges)
@@ -102,7 +102,7 @@ Extract all specific, verifiable claims as a JSON array.`;
 
     if (res.status === 429) {
       const waitSec = Math.pow(2, attempt + 1) * 15; // 30s, 60s, 120s
-      console.log(`[ClaimVault] Rate limited, waiting ${waitSec}s before retry ${attempt + 1}/3...`);
+      console.log(`[CreatorClaim] Rate limited, waiting ${waitSec}s before retry ${attempt + 1}/3...`);
       await new Promise((r) => setTimeout(r, waitSec * 1000));
       continue;
     }
@@ -150,7 +150,7 @@ function parseClaimsResponse(text: string): ExtractedClaim[] {
         timestampSeconds: Math.max(0, Math.round(Number(c.timestampSeconds) || 0)),
       }));
   } catch {
-    console.error('[ClaimVault] Failed to parse claims from AI response');
+    console.error('[CreatorClaim] Failed to parse claims from AI response');
     return [];
   }
 }

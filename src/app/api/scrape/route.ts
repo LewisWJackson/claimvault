@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     switch (action) {
       case 'full': {
         // Full pipeline: get videos + transcripts
-        console.log(`[ClaimVault] Starting full pipeline for ${channelHandle}`);
+        console.log(`[CreatorClaim] Starting full pipeline for ${channelHandle}`);
         const result = await processNewCreator(channelHandle);
         return NextResponse.json({
           success: true,
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
 
       case 'videos': {
         // Just get video list
-        console.log(`[ClaimVault] Fetching videos for ${channelHandle}`);
+        console.log(`[CreatorClaim] Fetching videos for ${channelHandle}`);
         const videos = await scrapeChannelVideos(channelHandle);
         return NextResponse.json({ success: true, videos });
       }
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
         if (!videoUrls || !Array.isArray(videoUrls)) {
           return NextResponse.json({ error: 'videoUrls array required for transcript action' }, { status: 400 });
         }
-        console.log(`[ClaimVault] Fetching transcripts for ${videoUrls.length} videos`);
+        console.log(`[CreatorClaim] Fetching transcripts for ${videoUrls.length} videos`);
         const transcripts = await scrapeTranscripts(videoUrls);
         return NextResponse.json({ success: true, transcripts });
       }
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Invalid action. Use: full, videos, or transcripts' }, { status: 400 });
     }
   } catch (error) {
-    console.error('[ClaimVault] Scraping error:', error);
+    console.error('[CreatorClaim] Scraping error:', error);
     return NextResponse.json({
       error: 'Scraping failed',
       details: error instanceof Error ? error.message : 'Unknown error',

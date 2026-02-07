@@ -69,7 +69,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ error: 'Invalid mode' }, { status: 400 });
   } catch (error) {
-    console.error('[ClaimVault] Verification error:', error);
+    console.error('[CreatorClaim] Verification error:', error);
     return NextResponse.json(
       { error: 'Verification failed', details: error instanceof Error ? error.message : 'Unknown' },
       { status: 500 },

@@ -1,4 +1,4 @@
-// ClaimVault Seed Data — Extracted from YouTube transcripts + verified
+// CreatorClaim Seed Data — Extracted from YouTube transcripts + verified
 // Generated: 2026-02-07
 // Total: 769 claims, 113 videos, 15 creators
 // Status: 151 true, 135 false, 69 partial, 15 expired, 399 unverifiable, 0 pending

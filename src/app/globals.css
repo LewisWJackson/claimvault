@@ -93,3 +93,87 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* ── Game Stats Animations ──────────────────────────────────────────────── */
+
+@keyframes glow-pulse {
+  0%, 100% { filter: drop-shadow(0 0 8px var(--glow-color, #f97316)); }
+  50% { filter: drop-shadow(0 0 20px var(--glow-color, #f97316)) drop-shadow(0 0 40px var(--glow-color, #f97316)); }
+}
+
+@keyframes score-glow {
+  0%, 100% { text-shadow: 0 0 10px currentColor; }
+  50% { text-shadow: 0 0 20px currentColor, 0 0 40px currentColor; }
+}
+
+@keyframes ring-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes scan-line {
+  0% { top: -2px; opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@keyframes stat-flash {
+  0% { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.game-score-glow {
+  animation: score-glow 2s ease-in-out infinite;
+}
+
+.game-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.game-ring-rotate {
+  animation: ring-rotate 8s linear infinite;
+}
+
+.game-scan-line::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(249,115,22,0.6), transparent);
+  animation: scan-line 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.stat-bar-flash {
+  background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: stat-flash 2s ease-in-out 1;
+}
+
+.game-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(249,115,22,0.5), rgba(224,64,251,0.5), transparent);
+}
+
+.game-card-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+}

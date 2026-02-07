@@ -159,7 +159,7 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   } catch (error) {
-    console.error('[ClaimVault] Extraction error:', error);
+    console.error('[CreatorClaim] Extraction error:', error);
     return NextResponse.json(
       {
         error: 'Extraction failed',

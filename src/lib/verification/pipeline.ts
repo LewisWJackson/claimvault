@@ -23,7 +23,7 @@ export async function verifyClaim(claim: Claim): Promise<VerificationResult> {
     try {
       priceData = await getXRPPriceData();
     } catch (err) {
-      console.error('[ClaimVault] CoinGecko error:', err);
+      console.error('[CreatorClaim] CoinGecko error:', err);
     }
   }
 
