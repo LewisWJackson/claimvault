@@ -57,11 +57,12 @@ function runYtDlp(videoId: string, outputPath: string): Promise<void> {
       '--sub-format', 'srv1',
       '--no-warnings',
       '--quiet',
+      '--js-runtimes', 'nodejs',
       '-o', outputPath,
       `https://www.youtube.com/watch?v=${videoId}`,
     ];
 
-    execFile('yt-dlp', args, { timeout: 30000 }, (error) => {
+    execFile('yt-dlp', args, { timeout: 60000 }, (error) => {
       if (error) {
         reject(new Error(`yt-dlp failed for ${videoId}: ${error.message}`));
       } else {
