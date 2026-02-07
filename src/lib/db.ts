@@ -34,19 +34,19 @@ export interface Claim {
   specificityScore: number;
 }
 
-// ─── Normalize seed data to app format ────────────────────────────────────────
+// ─── Load seed data directly (already in native format) ──────────────────────
 
 const videos: Video[] = rawVideos.map((v: any) => ({
   id: v.id,
   creatorId: v.creatorId,
   title: v.title,
-  youtubeVideoId: v.url?.split('watch?v=')[1] || v.id,
+  youtubeVideoId: v.youtubeVideoId || v.url?.split('watch?v=')[1] || v.id,
   publishedAt: v.publishedAt,
   viewCount: v.viewCount || 0,
-  thumbnailUrl: null,
-  transcriptStatus: 'completed',
-  claimsExtracted: true,
-  durationSeconds: v.duration || 0,
+  thumbnailUrl: v.thumbnailUrl || null,
+  transcriptStatus: v.transcriptStatus || 'completed',
+  claimsExtracted: v.claimsExtracted ?? true,
+  durationSeconds: v.durationSeconds || v.duration || 0,
 }));
 
 const claims: Claim[] = rawClaims.map((c: any) => ({
@@ -54,17 +54,15 @@ const claims: Claim[] = rawClaims.map((c: any) => ({
   creatorId: c.creatorId,
   videoId: c.videoId,
   claimText: c.claimText,
-  category: c.claimCategory || c.category || 'other',
+  category: c.category || c.claimCategory || 'other',
   status: c.status,
-  confidenceLanguage: c.claimStrength === 'strong' ? 'strong' : c.claimStrength === 'weak' ? 'speculative' : 'moderate',
+  confidenceLanguage: c.confidenceLanguage || 'moderate',
   statedTimeframe: c.statedTimeframe || null,
-  createdAt: c.claimDate || c.createdAt || '2025-01-15',
-  verificationDate: ['verified_true', 'verified_false', 'partially_true'].includes(c.status)
-    ? c.verificationDate || '2025-02-01'
-    : null,
+  createdAt: c.createdAt || '2025-01-15',
+  verificationDate: c.verificationDate || null,
   verificationNotes: c.verificationNotes || null,
-  videoTimestampSeconds: parseInt(c.sourceUrl?.match(/t=(\d+)/)?.[1] || '0', 10),
-  specificityScore: c.claimStrength === 'strong' ? 8 : c.claimStrength === 'weak' ? 4 : 6,
+  videoTimestampSeconds: c.videoTimestampSeconds || 0,
+  specificityScore: c.specificityScore || 5,
 }));
 
 // ─── Compute real creator stats from actual claims ──────────────────────────

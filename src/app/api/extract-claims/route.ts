@@ -6,15 +6,12 @@ import {
   getClaimCountForCreator,
   getAllCreators,
   getCreatorById,
-  updateClaimVerification,
-  type Claim,
 } from '@/lib/db';
 import {
   extractClaimsForCreator,
   extractClaimsForAllCreators,
   type ExtractedClaimResult,
 } from '@/lib/transcripts/pipeline';
-import { verifyClaim } from '@/lib/verification/pipeline';
 
 // Track recent extractions for GET status
 const extractionLog: Array<{
@@ -29,7 +26,6 @@ let isExtracting = false;
 async function processExtractedResults(results: ExtractedClaimResult[]) {
   let totalAdded = 0;
   let totalDeduplicated = 0;
-  const newClaims: Claim[] = [];
 
   for (const result of results) {
     if (result.error || result.claims.length === 0) continue;
@@ -60,7 +56,7 @@ async function processExtractedResults(results: ExtractedClaimResult[]) {
       }
 
       const claimId = `claim-${result.creatorId}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
-      const claim = addClaim({
+      addClaim({
         id: claimId,
         creatorId: result.creatorId,
         videoId: result.videoId,
@@ -82,7 +78,6 @@ async function processExtractedResults(results: ExtractedClaimResult[]) {
           extracted.claimStrength === 'strong' ? 8 : extracted.claimStrength === 'weak' ? 4 : 6,
       });
 
-      newClaims.push(claim);
       resultAdded++;
       totalAdded++;
     }
@@ -95,36 +90,19 @@ async function processExtractedResults(results: ExtractedClaimResult[]) {
     });
   }
 
-  // Verify new claims in background (fire-and-forget with rate limiting)
-  if (newClaims.length > 0) {
-    (async () => {
-      const concurrency = 2;
-      for (let i = 0; i < newClaims.length; i += concurrency) {
-        const batch = newClaims.slice(i, i + concurrency);
-        const settled = await Promise.allSettled(batch.map(c => verifyClaim(c)));
-        settled.forEach((result, j) => {
-          const claim = batch[j];
-          if (result.status === 'fulfilled' && result.value.status !== 'pending') {
-            updateClaimVerification(claim.id, {
-              status: result.value.status,
-              verificationNotes: result.value.verificationNotes,
-              verificationDate: new Date().toISOString().split('T')[0],
-            });
-            console.log(`[ClaimVault] Verified extracted claim ${claim.id}: ${result.value.status}`);
-          }
-        });
-        if (i + concurrency < newClaims.length) {
-          await new Promise(r => setTimeout(r, 1000));
-        }
-      }
-      console.log(`[ClaimVault] Finished verifying ${newClaims.length} extracted claims.`);
-    })().catch(err => console.error('[ClaimVault] Background verification error:', err));
-  }
-
   return { totalAdded, totalDeduplicated };
 }
 
 export async function POST(request: Request) {
+  const body = await request.json();
+  const { creatorId, mode, forceReset } = body;
+
+  // Allow force-resetting the extraction lock
+  if (forceReset) {
+    isExtracting = false;
+    return NextResponse.json({ success: true, message: 'Extraction lock reset' });
+  }
+
   if (isExtracting) {
     return NextResponse.json(
       { error: 'Extraction already in progress' },
@@ -134,8 +112,6 @@ export async function POST(request: Request) {
 
   try {
     isExtracting = true;
-    const body = await request.json();
-    const { creatorId, mode } = body;
 
     if (mode === 'all') {
       const results = await extractClaimsForAllCreators();

@@ -101,7 +101,7 @@ Extract all specific, verifiable claims as a JSON array.`;
     });
 
     if (res.status === 429) {
-      const waitSec = Math.pow(2, attempt + 1) * 30; // 60s, 120s, 240s
+      const waitSec = Math.pow(2, attempt + 1) * 15; // 30s, 60s, 120s
       console.log(`[ClaimVault] Rate limited, waiting ${waitSec}s before retry ${attempt + 1}/3...`);
       await new Promise((r) => setTimeout(r, waitSec * 1000));
       continue;
