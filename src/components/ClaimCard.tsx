@@ -1,7 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { ExternalLink, Clock, CheckCircle2, XCircle, AlertCircle, MinusCircle, HelpCircle } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Play, X, Clock, CheckCircle2, XCircle, AlertCircle, MinusCircle, HelpCircle } from 'lucide-react';
 import { getStatusColor, getStatusLabel, getCategoryColor } from '@/lib/types';
 import DisputeButton from './DisputeButton';
 
@@ -16,6 +17,7 @@ interface ClaimCardProps {
     createdAt: string;
     verificationDate: string | null;
     verificationNotes: string | null;
+    videoTimestampSeconds?: number;
     creator?: {
       id: string;
       channelName: string;
@@ -44,6 +46,13 @@ const statusIcons: Record<string, React.ReactNode> = {
 export default function ClaimCard({ claim, index = 0, showCreator = true }: ClaimCardProps) {
   const statusColor = getStatusColor(claim.status);
   const categoryColor = getCategoryColor(claim.category);
+  const [showVideo, setShowVideo] = useState(false);
+
+  const videoId = claim.video?.youtubeVideoId;
+  const timestamp = claim.videoTimestampSeconds || 0;
+  const embedUrl = videoId
+    ? `https://www.youtube.com/embed/${videoId}?start=${timestamp}&autoplay=1&rel=0`
+    : null;
 
   return (
     <motion.div
@@ -98,10 +107,49 @@ export default function ClaimCard({ claim, index = 0, showCreator = true }: Clai
 
       <DisputeButton claimId={claim.id} />
 
-      {claim.video && (
-        <div className="mt-3 flex items-center gap-1.5">
-          <ExternalLink className="w-3 h-3 text-white/30" />
-          <span className="text-xs text-white/30 truncate">{claim.video.title}</span>
+      {/* Video source with embedded player */}
+      {claim.video && videoId && (
+        <div className="mt-3">
+          <button
+            onClick={() => setShowVideo(!showVideo)}
+            className="flex items-center gap-2 text-xs text-white/40 hover:text-red-400 transition-colors group"
+          >
+            {showVideo ? (
+              <X className="w-3.5 h-3.5" />
+            ) : (
+              <Play className="w-3.5 h-3.5 text-red-400/60 group-hover:text-red-400" />
+            )}
+            <span className="truncate max-w-[300px]">{claim.video.title}</span>
+            {timestamp > 0 && !showVideo && (
+              <span className="text-white/20 flex-shrink-0">
+                @{Math.floor(timestamp / 60)}:{(timestamp % 60).toString().padStart(2, '0')}
+              </span>
+            )}
+          </button>
+
+          <AnimatePresence>
+            {showVideo && embedUrl && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden mt-2"
+              >
+                <div className="relative w-full rounded-lg overflow-hidden border border-white/10"
+                  style={{ paddingBottom: '56.25%' }}
+                >
+                  <iframe
+                    src={embedUrl}
+                    className="absolute inset-0 w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title={claim.video.title}
+                  />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       )}
     </motion.div>
