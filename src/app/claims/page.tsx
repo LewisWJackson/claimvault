@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Zap, Search, Filter } from 'lucide-react';
 import ClaimCard from '@/components/ClaimCard';
+import BatchVerifyButton from '@/components/BatchVerifyButton';
 import { getClaimsWithCreators } from '@/lib/db';
 import { getStatusLabel } from '@/lib/types';
 
@@ -39,13 +40,16 @@ export default function ClaimsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-3">
           <Zap className="w-7 h-7 text-purple-400" />
           Claim Feed
         </h1>
         <p className="text-sm text-white/40 mt-1">
           Every prediction tracked, every outcome verified
         </p>
+        <div className="mt-3">
+          <BatchVerifyButton />
+        </div>
       </div>
 
       {/* Search */}

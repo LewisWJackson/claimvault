@@ -32,7 +32,7 @@ export default function LeaderboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-3">
             <Trophy className="w-7 h-7 text-amber-400" />
             Leaderboard
           </h1>
@@ -83,7 +83,7 @@ export default function LeaderboardPage() {
               >
                 {/* Rank badge */}
                 <div className="absolute top-4 right-4">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg ${
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-semibold text-lg ${
                     i === 0 ? 'bg-amber-400/20 text-amber-400' :
                     i === 1 ? 'bg-gray-300/20 text-gray-300' :
                     'bg-orange-400/20 text-orange-400'
@@ -97,13 +97,13 @@ export default function LeaderboardPage() {
                     {creator.avatarUrl ? (
                       <img src={creator.avatarUrl} alt={creator.channelName} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-xl font-bold text-white/50">
+                      <div className="w-full h-full flex items-center justify-center text-xl font-semibold text-white/50">
                         {creator.channelName[0]}
                       </div>
                     )}
                   </div>
                   <div>
-                    <h3 className="font-bold text-white">{creator.channelName}</h3>
+                    <h3 className="font-semibold text-white">{creator.channelName}</h3>
                     <div className="flex items-center gap-2">
                       <TierBadge tier={creator.tier} size="sm" />
                     </div>
@@ -115,7 +115,7 @@ export default function LeaderboardPage() {
                 <div className="flex items-center justify-between mt-3">
                   <div>
                     <div className="text-xs text-white/40">Accuracy</div>
-                    <div className={`text-2xl font-bold ${accuracyColor}`}>{creator.overallAccuracy}%</div>
+                    <div className={`text-2xl font-semibold ${accuracyColor}`}>{creator.overallAccuracy}%</div>
                   </div>
                   <div className="text-right">
                     <div className="text-xs text-white/40">Claims</div>

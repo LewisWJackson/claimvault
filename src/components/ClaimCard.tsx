@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion';
 import { ExternalLink, Clock, CheckCircle2, XCircle, AlertCircle, MinusCircle } from 'lucide-react';
 import { getStatusColor, getStatusLabel, getCategoryColor } from '@/lib/types';
+import VerifyButton from './VerifyButton';
+import DisputeButton from './DisputeButton';
 
 interface ClaimCardProps {
   claim: {
@@ -56,7 +58,7 @@ export default function ClaimCard({ claim, index = 0, showCreator = true }: Clai
             {claim.creator.avatarUrl ? (
               <img src={claim.creator.avatarUrl} alt={claim.creator.channelName} className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-white/50 text-xs font-bold">
+              <div className="w-full h-full flex items-center justify-center text-white/50 text-xs font-medium">
                 {claim.creator.channelName[0]}
               </div>
             )}
@@ -93,6 +95,9 @@ export default function ClaimCard({ claim, index = 0, showCreator = true }: Clai
           <p className="text-xs text-white/50 leading-relaxed">{claim.verificationNotes}</p>
         </div>
       )}
+
+      <VerifyButton claimId={claim.id} currentStatus={claim.status} />
+      <DisputeButton claimId={claim.id} />
 
       {claim.video && (
         <div className="mt-3 flex items-center gap-1.5">

@@ -86,7 +86,7 @@ export default function CreatorProfilePage() {
                 {creator.avatarUrl ? (
                   <img src={creator.avatarUrl} alt={creator.channelName} className="w-full h-full object-cover" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-3xl font-bold text-white/50">
+                  <div className="w-full h-full flex items-center justify-center text-3xl font-semibold text-white/50">
                     {creator.channelName[0]}
                   </div>
                 )}
@@ -97,7 +97,7 @@ export default function CreatorProfilePage() {
             </div>
 
             <div className="text-center lg:text-left">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white">{creator.channelName}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-white">{creator.channelName}</h1>
               <div className="flex items-center gap-2 mt-1 justify-center lg:justify-start">
                 <span className="text-sm text-white/40">{creator.channelHandle}</span>
                 <a href={creator.channelUrl} target="_blank" rel="noopener noreferrer"
@@ -113,7 +113,7 @@ export default function CreatorProfilePage() {
 
             {/* Rank */}
             <div className="flex items-center gap-3 glass-card-sm px-4 py-2">
-              <span className="text-2xl font-bold text-white">#{creator.rankOverall}</span>
+              <span className="text-2xl font-semibold text-white">#{creator.rankOverall}</span>
               <div className="flex items-center gap-1">{rankIcon}</div>
               <span className="text-xs text-white/30">Overall Rank</span>
             </div>
@@ -130,7 +130,7 @@ export default function CreatorProfilePage() {
             {/* Accuracy headline */}
             <div className="glass-card-sm p-4 text-center accent-glow">
               <div className="text-xs text-white/40 uppercase tracking-wider mb-1">Overall Accuracy</div>
-              <div className={`text-4xl font-extrabold ${accuracyColor}`}>{creator.overallAccuracy}%</div>
+              <div className={`text-4xl font-bold ${accuracyColor}`}>{creator.overallAccuracy}%</div>
             </div>
 
             {/* Stat grid */}
@@ -138,17 +138,17 @@ export default function CreatorProfilePage() {
               <div className="glass-card-sm p-3 text-center">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 mx-auto mb-1" />
                 <div className="text-xs text-white/40">True</div>
-                <div className="text-lg font-bold text-emerald-400">{creator.verifiedTrue}</div>
+                <div className="text-lg font-semibold text-emerald-400">{creator.verifiedTrue}</div>
               </div>
               <div className="glass-card-sm p-3 text-center">
                 <XCircle className="w-4 h-4 text-red-400 mx-auto mb-1" />
                 <div className="text-xs text-white/40">False</div>
-                <div className="text-lg font-bold text-red-400">{creator.verifiedFalse}</div>
+                <div className="text-lg font-semibold text-red-400">{creator.verifiedFalse}</div>
               </div>
               <div className="glass-card-sm p-3 text-center">
                 <Clock className="w-4 h-4 text-blue-400 mx-auto mb-1" />
                 <div className="text-xs text-white/40">Pending</div>
-                <div className="text-lg font-bold text-blue-400">{creator.pendingClaims}</div>
+                <div className="text-lg font-semibold text-blue-400">{creator.pendingClaims}</div>
               </div>
             </div>
 
@@ -165,7 +165,7 @@ export default function CreatorProfilePage() {
             <div className="grid grid-cols-2 gap-2">
               <div className="glass-card-sm p-3 text-center">
                 <div className="text-xs text-white/30">Total Claims</div>
-                <div className="text-lg font-bold text-white">{creator.totalClaims}</div>
+                <div className="text-lg font-semibold text-white">{creator.totalClaims}</div>
               </div>
               <div className="glass-card-sm p-3 text-center">
                 <div className="text-xs text-white/30">Tracking Since</div>

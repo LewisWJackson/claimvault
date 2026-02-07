@@ -19,7 +19,7 @@ export default function PulsePage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-3">
           <Activity className="w-7 h-7 text-cyan-400" />
           Market Pulse
         </h1>
@@ -38,21 +38,21 @@ export default function PulsePage() {
             className="bg-gradient-to-r from-emerald-500 to-emerald-400 flex items-center justify-center"
             style={{ width: `${pulse.bullishPercent}%` }}
           >
-            <span className="text-xs font-bold text-white">{pulse.bullishPercent}%</span>
+            <span className="text-xs font-semibold text-white">{pulse.bullishPercent}%</span>
           </div>
           {pulse.neutralPercent > 0 && (
             <div
               className="bg-gradient-to-r from-gray-500 to-gray-400 flex items-center justify-center"
               style={{ width: `${pulse.neutralPercent}%` }}
             >
-              <span className="text-xs font-bold text-white">{pulse.neutralPercent}%</span>
+              <span className="text-xs font-semibold text-white">{pulse.neutralPercent}%</span>
             </div>
           )}
           <div
             className="bg-gradient-to-r from-red-500 to-red-400 flex items-center justify-center"
             style={{ width: `${pulse.bearishPercent}%` }}
           >
-            <span className="text-xs font-bold text-white">{pulse.bearishPercent}%</span>
+            <span className="text-xs font-semibold text-white">{pulse.bearishPercent}%</span>
           </div>
         </div>
 
@@ -116,22 +116,22 @@ export default function PulsePage() {
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="glass-card-sm p-4 text-center">
           <Users className="w-5 h-5 text-orange-400 mx-auto mb-2" />
-          <div className="text-2xl font-bold text-white">{pulse.totalCreators}</div>
+          <div className="text-2xl font-semibold text-white">{pulse.totalCreators}</div>
           <div className="text-xs text-white/40">Creators Tracked</div>
         </div>
         <div className="glass-card-sm p-4 text-center">
           <Activity className="w-5 h-5 text-purple-400 mx-auto mb-2" />
-          <div className="text-2xl font-bold text-white">{pulse.totalClaims}</div>
+          <div className="text-2xl font-semibold text-white">{pulse.totalClaims}</div>
           <div className="text-xs text-white/40">Total Claims</div>
         </div>
         <div className="glass-card-sm p-4 text-center">
           <CheckCircle2 className="w-5 h-5 text-emerald-400 mx-auto mb-2" />
-          <div className="text-2xl font-bold text-emerald-400">{pulse.verifiedTrue}</div>
+          <div className="text-2xl font-semibold text-emerald-400">{pulse.verifiedTrue}</div>
           <div className="text-xs text-white/40">Verified True</div>
         </div>
         <div className="glass-card-sm p-4 text-center">
           <XCircle className="w-5 h-5 text-red-400 mx-auto mb-2" />
-          <div className="text-2xl font-bold text-red-400">{pulse.verifiedFalse}</div>
+          <div className="text-2xl font-semibold text-red-400">{pulse.verifiedFalse}</div>
           <div className="text-xs text-white/40">Verified False</div>
         </div>
       </section>

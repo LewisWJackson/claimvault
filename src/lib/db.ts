@@ -160,6 +160,18 @@ export function getClaimsWithCreators(filters?: { status?: string; category?: st
     }));
 }
 
+// ─── Claim mutations ─────────────────────────────────────────────────────────
+
+export function updateClaimVerification(
+  claimId: string,
+  update: { status: string; verificationNotes: string; verificationDate: string },
+): boolean {
+  const idx = claims.findIndex(c => c.id === claimId);
+  if (idx === -1) return false;
+  claims[idx] = { ...claims[idx], ...update };
+  return true;
+}
+
 // ─── Aggregate stats ──────────────────────────────────────────────────────────
 
 export function getMarketPulse() {

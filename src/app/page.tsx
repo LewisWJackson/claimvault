@@ -19,7 +19,7 @@ export default function HomePage() {
           Tracking {pulse.totalCreators} XRP Creators &middot; {pulse.totalClaims} Claims Analyzed
         </div>
 
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
           Who&apos;s Actually <span className="gradient-text">Right?</span>
         </h1>
         <p className="text-lg text-white/40 max-w-2xl mx-auto mb-8">
@@ -50,31 +50,31 @@ export default function HomePage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
           <div className="glass-card-sm p-3 text-center">
             <div className="text-xs text-white/40 mb-1">Creators</div>
-            <div className="text-xl font-bold text-white">{pulse.totalCreators}</div>
+            <div className="text-xl font-semibold text-white">{pulse.totalCreators}</div>
           </div>
           <div className="glass-card-sm p-3 text-center">
             <div className="text-xs text-white/40 mb-1">Total Claims</div>
-            <div className="text-xl font-bold text-white">{pulse.totalClaims}</div>
+            <div className="text-xl font-semibold text-white">{pulse.totalClaims}</div>
           </div>
           <div className="glass-card-sm p-3 text-center">
             <div className="text-xs text-emerald-400/60 mb-1">Verified True</div>
-            <div className="text-xl font-bold text-emerald-400">{pulse.verifiedTrue}</div>
+            <div className="text-xl font-semibold text-emerald-400">{pulse.verifiedTrue}</div>
           </div>
           <div className="glass-card-sm p-3 text-center">
             <div className="text-xs text-red-400/60 mb-1">Verified False</div>
-            <div className="text-xl font-bold text-red-400">{pulse.verifiedFalse}</div>
+            <div className="text-xl font-semibold text-red-400">{pulse.verifiedFalse}</div>
           </div>
           <div className="glass-card-sm p-3 text-center">
             <div className="text-xs text-blue-400/60 mb-1">Pending</div>
-            <div className="text-xl font-bold text-blue-400">{pulse.pendingClaims}</div>
+            <div className="text-xl font-semibold text-blue-400">{pulse.pendingClaims}</div>
           </div>
           <div className="glass-card-sm p-3 text-center">
             <div className="text-xs text-emerald-400/60 mb-1">Bullish</div>
-            <div className="text-xl font-bold text-emerald-400">{pulse.bullishPercent}%</div>
+            <div className="text-xl font-semibold text-emerald-400">{pulse.bullishPercent}%</div>
           </div>
           <div className="glass-card-sm p-3 text-center">
             <div className="text-xs text-red-400/60 mb-1">Bearish</div>
-            <div className="text-xl font-bold text-red-400">{pulse.bearishPercent}%</div>
+            <div className="text-xl font-semibold text-red-400">{pulse.bearishPercent}%</div>
           </div>
         </div>
       </section>
@@ -121,7 +121,7 @@ export default function HomePage() {
       {/* CTA */}
       <section className="glass-card p-8 text-center gradient-border">
         <Users className="w-8 h-8 text-orange-400 mx-auto mb-3" />
-        <h2 className="text-xl font-bold text-white mb-2">Know an XRP Creator We Should Track?</h2>
+        <h2 className="text-xl font-semibold text-white mb-2">Know an XRP Creator We Should Track?</h2>
         <p className="text-sm text-white/40 mb-5 max-w-md mx-auto">
           Submit a YouTube channel URL and our system will automatically start tracking their claims.
         </p>

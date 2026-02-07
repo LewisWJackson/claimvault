@@ -53,7 +53,7 @@ export default function CreatorCard({ creator, index = 0, showRank = true }: Cre
         <div className="flex items-center gap-4">
           {showRank && (
             <div className="flex flex-col items-center w-8">
-              <span className="text-lg font-bold text-white/70">#{creator.rankOverall}</span>
+              <span className="text-lg font-semibold text-white/70">#{creator.rankOverall}</span>
               <span className="flex items-center gap-0.5">{rankIcon}</span>
             </div>
           )}
@@ -62,7 +62,7 @@ export default function CreatorCard({ creator, index = 0, showRank = true }: Cre
             {creator.avatarUrl ? (
               <img src={creator.avatarUrl} alt={creator.channelName} className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-white/50 font-bold">
+              <div className="w-full h-full flex items-center justify-center text-white/50 font-medium">
                 {creator.channelName[0]}
               </div>
             )}
@@ -82,7 +82,7 @@ export default function CreatorCard({ creator, index = 0, showRank = true }: Cre
           </div>
 
           <div className="text-right flex-shrink-0">
-            <div className={`text-xl font-bold ${accuracyColor}`}>
+            <div className={`text-xl font-semibold ${accuracyColor}`}>
               {creator.overallAccuracy}%
             </div>
             <div className="text-xs text-white/30">

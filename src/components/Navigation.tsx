@@ -25,7 +25,7 @@ export default function Navigation() {
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-purple-600 flex items-center justify-center shadow-lg shadow-orange-500/20 group-hover:shadow-orange-500/40 transition-shadow">
               <BarChart3 className="w-5 h-5 text-white" />
             </div>
-            <span className="text-lg font-bold tracking-tight">
+            <span className="text-lg font-semibold tracking-tight">
               <span className="text-white">Claim</span>
               <span className="gradient-text">Vault</span>
             </span>
