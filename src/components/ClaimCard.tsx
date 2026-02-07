@@ -1,9 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ExternalLink, Clock, CheckCircle2, XCircle, AlertCircle, MinusCircle } from 'lucide-react';
+import { ExternalLink, Clock, CheckCircle2, XCircle, AlertCircle, MinusCircle, HelpCircle } from 'lucide-react';
 import { getStatusColor, getStatusLabel, getCategoryColor } from '@/lib/types';
-import VerifyButton from './VerifyButton';
 import DisputeButton from './DisputeButton';
 
 interface ClaimCardProps {
@@ -39,6 +38,7 @@ const statusIcons: Record<string, React.ReactNode> = {
   partially_true: <AlertCircle className="w-4 h-4" />,
   pending: <Clock className="w-4 h-4" />,
   expired: <MinusCircle className="w-4 h-4" />,
+  unverifiable: <HelpCircle className="w-4 h-4" />,
 };
 
 export default function ClaimCard({ claim, index = 0, showCreator = true }: ClaimCardProps) {
@@ -96,7 +96,6 @@ export default function ClaimCard({ claim, index = 0, showCreator = true }: Clai
         </div>
       )}
 
-      <VerifyButton claimId={claim.id} currentStatus={claim.status} />
       <DisputeButton claimId={claim.id} />
 
       {claim.video && (

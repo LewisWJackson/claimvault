@@ -4,11 +4,10 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Zap, Search, Filter } from 'lucide-react';
 import ClaimCard from '@/components/ClaimCard';
-import BatchVerifyButton from '@/components/BatchVerifyButton';
 import { getClaimsWithCreators } from '@/lib/db';
 import { getStatusLabel } from '@/lib/types';
 
-type StatusFilter = 'all' | 'pending' | 'verified_true' | 'verified_false' | 'partially_true';
+type StatusFilter = 'all' | 'verified_true' | 'verified_false' | 'partially_true' | 'expired' | 'unverifiable';
 type CategoryFilter = 'all' | 'price' | 'timeline' | 'regulatory' | 'partnership' | 'technology' | 'market';
 
 export default function ClaimsPage() {
@@ -30,10 +29,11 @@ export default function ClaimsPage() {
 
   const statusCounts = {
     all: getClaimsWithCreators().length,
-    pending: getClaimsWithCreators({ status: 'pending' }).length,
     verified_true: getClaimsWithCreators({ status: 'verified_true' }).length,
     verified_false: getClaimsWithCreators({ status: 'verified_false' }).length,
     partially_true: getClaimsWithCreators({ status: 'partially_true' }).length,
+    expired: getClaimsWithCreators({ status: 'expired' }).length,
+    unverifiable: getClaimsWithCreators({ status: 'unverifiable' }).length,
   };
 
   return (
@@ -47,9 +47,6 @@ export default function ClaimsPage() {
         <p className="text-sm text-white/40 mt-1">
           Every prediction tracked, every outcome verified
         </p>
-        <div className="mt-3">
-          <BatchVerifyButton />
-        </div>
       </div>
 
       {/* Search */}

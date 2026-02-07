@@ -1,4 +1,5 @@
 import { creators as rawCreators, videos as rawVideos, claims as rawClaims } from '@/data/seed';
+import { verifyClaim } from '@/lib/verification/pipeline';
 
 // ─── Type definitions ─────────────────────────────────────────────────────────
 
@@ -171,6 +172,54 @@ export function updateClaimVerification(
   claims[idx] = { ...claims[idx], ...update };
   return true;
 }
+
+// ─── Auto-verification on startup ─────────────────────────────────────────────
+
+let verificationStarted = false;
+
+async function autoVerifyPendingClaims() {
+  if (verificationStarted) return;
+  verificationStarted = true;
+
+  const pending = claims.filter(c => c.status === 'pending');
+  if (pending.length === 0) {
+    console.log('[ClaimVault] No pending claims to verify.');
+    return;
+  }
+
+  console.log(`[ClaimVault] Auto-verifying ${pending.length} pending claims in background...`);
+
+  const concurrency = 2;
+  for (let i = 0; i < pending.length; i += concurrency) {
+    const batch = pending.slice(i, i + concurrency);
+    const settled = await Promise.allSettled(batch.map(c => verifyClaim(c)));
+
+    settled.forEach((result, j) => {
+      const claim = batch[j];
+      if (result.status === 'fulfilled' && result.value.status !== 'pending') {
+        updateClaimVerification(claim.id, {
+          status: result.value.status,
+          verificationNotes: result.value.verificationNotes,
+          verificationDate: new Date().toISOString().split('T')[0],
+        });
+        console.log(`[ClaimVault] Verified ${claim.id}: ${result.value.status}`);
+      } else if (result.status === 'rejected') {
+        console.error(`[ClaimVault] Failed to verify ${claim.id}:`, result.reason?.message);
+      }
+    });
+
+    if (i + concurrency < pending.length) {
+      await new Promise(r => setTimeout(r, 1000));
+    }
+  }
+
+  console.log('[ClaimVault] Auto-verification complete.');
+}
+
+// Fire and forget — runs in background on first module load
+autoVerifyPendingClaims().catch(err =>
+  console.error('[ClaimVault] Auto-verification error:', err)
+);
 
 // ─── Aggregate stats ──────────────────────────────────────────────────────────
 

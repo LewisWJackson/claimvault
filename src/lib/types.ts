@@ -94,6 +94,7 @@ export function getStatusColor(status: ClaimStatus | string): string {
     case 'partially_true': return 'text-amber-400 bg-amber-400/10 border-amber-400/20';
     case 'pending': return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
     case 'expired': return 'text-gray-400 bg-gray-400/10 border-gray-400/20';
+    case 'unverifiable': return 'text-purple-400 bg-purple-400/10 border-purple-400/20';
     default: return 'text-gray-400 bg-gray-400/10 border-gray-400/20';
   }
 }
