@@ -77,7 +77,7 @@ export default async function StoryDetailPage({ params }: PageProps) {
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
       {/* Back link */}
-      <Link href="/" className="inline-flex items-center gap-2 text-sm text-white/40 hover:text-white/70 transition-colors">
+      <Link href="/stories" className="inline-flex items-center gap-2 text-sm text-white/40 hover:text-white/70 transition-colors">
         <ArrowLeft className="w-4 h-4" /> Back to Stories
       </Link>
 

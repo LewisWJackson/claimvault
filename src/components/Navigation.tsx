@@ -3,14 +3,14 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { BarChart3, Newspaper, Users, Radio, LayoutGrid, Menu, X } from 'lucide-react';
+import { BarChart3, Newspaper, Users, Zap, Activity, Menu, X } from 'lucide-react';
 import clsx from 'clsx';
 
 const navItems = [
-  { href: '/', label: 'Stories', icon: Newspaper },
-  { href: '/creators', label: 'Creators', icon: Users },
-  { href: '/echo-chambers', label: 'Echo Chambers', icon: Radio },
-  { href: '/categories', label: 'Categories', icon: LayoutGrid },
+  { href: '/', label: 'Creators', icon: Users },
+  { href: '/claims', label: 'Claims', icon: Zap },
+  { href: '/stories', label: 'Stories', icon: Newspaper },
+  { href: '/pulse', label: 'Pulse', icon: Activity },
 ];
 
 export default function Navigation() {

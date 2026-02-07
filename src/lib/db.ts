@@ -520,6 +520,16 @@ export function getStoryCount(): number {
 
 // ─── Creator profile queries ────────────────────────────────────────────────
 
+export function getCreatorsWithProfiles() {
+  return creators.map(c => {
+    const profile = getCreatorProfile(c.id);
+    return {
+      ...c,
+      ...profile,
+    };
+  }).filter(c => c !== null);
+}
+
 export function getCreatorProfile(id: string): CreatorProfile | null {
   const creator = creators.find(c => c.id === id);
   if (!creator) return null;

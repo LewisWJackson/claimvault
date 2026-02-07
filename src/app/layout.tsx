@@ -3,8 +3,8 @@ import './globals.css';
 import Navigation from '@/components/Navigation';
 
 export const metadata: Metadata = {
-  title: 'ClaimVault — Crypto Creator Accountability',
-  description: 'Track crypto YouTuber predictions. See who\'s right, who\'s wrong, and what they\'re saying now.',
+  title: 'ClaimVault — Which Crypto YouTubers Can You Trust?',
+  description: 'Track crypto creator predictions and verify them against reality. See who\'s trustworthy and who\'s speculating.',
   keywords: ['XRP', 'crypto', 'YouTube', 'predictions', 'accuracy', 'accountability'],
 };
 
