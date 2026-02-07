@@ -27,14 +27,13 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-EXPOSE 3000
-ENV PORT=3000
-
-# Force bind to 0.0.0.0 at startup — Railway/Docker can override HOSTNAME env var
-CMD HOSTNAME=0.0.0.0 node server.js
+# Railway injects PORT=8080 at runtime. EXPOSE is ignored by Railway.
+# HOSTNAME must be set inline — Docker sets HOSTNAME to the container ID
+# at runtime, which would override ENV. Inline guarantees 0.0.0.0 binding.
+CMD ["sh", "-c", "HOSTNAME=0.0.0.0 node server.js"]
