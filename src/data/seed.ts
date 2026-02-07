@@ -67,7 +67,7 @@ export const creators = [
   },
   {
     id: 'digital-perspectives',
-    youtubeChannelId: 'UCXGkPsLMfBBXRLP',
+    youtubeChannelId: 'UCQKnyICqWksz8ygILHS01gQ',
     channelHandle: '@DigPerspectives',
     channelName: 'Digital Perspectives',
     channelUrl: 'https://youtube.com/@DigPerspectives',
@@ -183,7 +183,7 @@ export const creators = [
   },
   {
     id: 'xrp-right-now',
-    youtubeChannelId: 'UCxrprightnow',
+    youtubeChannelId: 'UCcuZuPUJgYKQIwFJRwE6vcg',
     channelHandle: '@xrprightnow',
     channelName: 'XRP Right Now',
     channelUrl: 'https://youtube.com/@xrprightnow',
@@ -357,7 +357,7 @@ export const creators = [
   },
   {
     id: 'on-the-chain',
-    youtubeChannelId: 'UConthechain',
+    youtubeChannelId: 'UCwti2YHJyAKnXRukuGHUGwg',
     channelHandle: '@OnTheChain',
     channelName: 'On The Chain',
     channelUrl: 'https://youtube.com/@OnTheChain',
@@ -415,7 +415,7 @@ export const creators = [
   },
   {
     id: 'coinclubcrypto',
-    youtubeChannelId: 'UCcoinclubcrypto',
+    youtubeChannelId: 'UCSJsDoeJ0s7fIka2paR0oYw',
     channelHandle: '@coinclubcrypto',
     channelName: 'Coinclubcrypto',
     channelUrl: 'https://youtube.com/@coinclubcrypto',

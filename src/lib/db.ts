@@ -185,6 +185,55 @@ export function getClaimsWithCreators(filters?: { status?: string; category?: st
     }));
 }
 
+// ─── Dynamic claim/video management ─────────────────────────────────────────
+
+export function addClaim(
+  input: Omit<Claim, 'videoTimestampSeconds' | 'specificityScore'> & {
+    videoTimestampSeconds?: number;
+    specificityScore?: number;
+  },
+): Claim {
+  const claim: Claim = {
+    ...input,
+    videoTimestampSeconds: input.videoTimestampSeconds ?? 0,
+    specificityScore: input.specificityScore ?? 5,
+  };
+  claims.push(claim);
+  recomputeCreatorStats(claim.creatorId);
+  return claim;
+}
+
+export function addVideo(video: Video): Video {
+  const existing = videos.find(v => v.id === video.id);
+  if (existing) return existing;
+  videos.push(video);
+  return video;
+}
+
+export function claimExists(claimText: string, creatorId: string): boolean {
+  const newWords = claimText.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+  if (newWords.length === 0) return false;
+
+  return claims.some(c => {
+    if (c.creatorId !== creatorId) return false;
+    const existingWords = c.claimText.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+    if (existingWords.length === 0) return false;
+    const overlap = newWords.filter(w => existingWords.includes(w)).length;
+    return overlap / Math.max(newWords.length, existingWords.length) > 0.6;
+  });
+}
+
+export function getClaimCountForCreator(creatorId: string): number {
+  return claims.filter(c => c.creatorId === creatorId).length;
+}
+
+function recomputeCreatorStats(creatorId: string) {
+  const idx = creators.findIndex(c => c.id === creatorId);
+  if (idx === -1) return;
+  const stats = computeCreatorStats(creatorId);
+  creators[idx] = { ...creators[idx], ...stats };
+}
+
 // ─── Claim mutations ─────────────────────────────────────────────────────────
 
 export function updateClaimVerification(
