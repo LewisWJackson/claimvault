@@ -2,19 +2,20 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart3, Home, Trophy, Zap, UserPlus, Activity } from 'lucide-react';
+import { useState } from 'react';
+import { BarChart3, Newspaper, Users, Radio, LayoutGrid, Menu, X } from 'lucide-react';
 import clsx from 'clsx';
 
 const navItems = [
-  { href: '/', label: 'Home', icon: Home },
-  { href: '/creators', label: 'Leaderboard', icon: Trophy },
-  { href: '/claims', label: 'Claims', icon: Zap },
-  { href: '/pulse', label: 'Pulse', icon: Activity },
-  { href: '/suggest', label: 'Suggest', icon: UserPlus },
+  { href: '/', label: 'Stories', icon: Newspaper },
+  { href: '/creators', label: 'Creators', icon: Users },
+  { href: '/echo-chambers', label: 'Echo Chambers', icon: Radio },
+  { href: '/categories', label: 'Categories', icon: LayoutGrid },
 ];
 
 export default function Navigation() {
   const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06]"
@@ -55,25 +56,38 @@ export default function Navigation() {
               <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-xs text-white/50">Tracking <span className="text-white font-medium">XRP</span></span>
             </div>
+            <button
+              className="md:hidden p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/[0.06] transition-all"
+              onClick={() => setMobileOpen(!mobileOpen)}
+            >
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
       </div>
 
-      <div className="md:hidden flex items-center justify-around px-2 pb-2">
-        {navItems.map((item) => {
-          const isActive = pathname === item.href ||
-            (item.href !== '/' && pathname.startsWith(item.href));
-          return (
-            <Link key={item.href} href={item.href}
-              className={clsx(
-                'flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg text-xs transition-all',
-                isActive ? 'text-orange-400' : 'text-white/40'
-              )}>
-              <item.icon className="w-4 h-4" />
-              {item.label}
-            </Link>
-          );
-        })}
+      {/* Mobile menu */}
+      <div className={clsx(
+        'md:hidden overflow-hidden transition-all duration-200',
+        mobileOpen ? 'max-h-64 pb-3' : 'max-h-0'
+      )}>
+        <div className="flex items-center justify-around px-2">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href ||
+              (item.href !== '/' && pathname.startsWith(item.href));
+            return (
+              <Link key={item.href} href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className={clsx(
+                  'flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg text-xs transition-all',
+                  isActive ? 'text-orange-400' : 'text-white/40'
+                )}>
+                <item.icon className="w-4 h-4" />
+                {item.label}
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </nav>
   );

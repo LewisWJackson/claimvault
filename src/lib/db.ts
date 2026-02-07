@@ -1,4 +1,25 @@
 import { creators as rawCreators, videos as rawVideos, claims as rawClaims } from '@/data/seed';
+import { stories as rawStories, claimStoryMap } from '@/data/stories';
+import {
+  calculateValidityBreakdown,
+  calculateCreatorLean,
+  calculateReliabilityScore,
+  getReliabilityFromScore,
+  calculateEchoChamberScore,
+  calculateTrendingScore,
+  calculateCategoryAccuracy,
+} from '@/lib/scoring';
+import type {
+  Story,
+  StoryDetail,
+  StoryCreator,
+  CreatorProfile,
+  ValidityBreakdown,
+  ValidityLean,
+  CreatorReliability,
+  ClaimWithCreator,
+  StoryCategory,
+} from '@/lib/types';
 
 // ─── Type definitions ─────────────────────────────────────────────────────────
 
@@ -89,6 +110,179 @@ const creators = rawCreators.map(c => {
   const stats = computeCreatorStats(c.id);
   return { ...c, ...stats };
 });
+
+// ─── Build claim lookup for fast access ─────────────────────────────────────
+
+const claimsById = new Map<string, Claim>();
+for (const c of claims) claimsById.set(c.id, c);
+
+// ─── Compute story data at module load time ─────────────────────────────────
+
+interface ComputedStory extends Story {
+  _claimIds: string[];
+}
+
+const computedStories: ComputedStory[] = rawStories.map(raw => {
+  // Resolve claims belonging to this story
+  const storyClaims = raw.claimIds
+    .map(id => claimsById.get(id))
+    .filter((c): c is Claim => c != null);
+
+  // Validity breakdown
+  const validity = calculateValidityBreakdown(storyClaims);
+
+  // Unique creators in this story
+  const creatorIds = Array.from(new Set(storyClaims.map(c => c.creatorId)));
+
+  // Echo chamber detection
+  const echo = calculateEchoChamberScore(validity);
+
+  // Date range
+  const dates = storyClaims.map(c => new Date(c.createdAt).getTime());
+  const firstMentionedAt = dates.length > 0
+    ? new Date(Math.min(...dates)).toISOString()
+    : new Date().toISOString();
+  const lastUpdatedAt = dates.length > 0
+    ? new Date(Math.max(...dates)).toISOString()
+    : new Date().toISOString();
+
+  // Trending score
+  const trendingScore = calculateTrendingScore(
+    creatorIds.length,
+    storyClaims.length,
+    firstMentionedAt,
+    lastUpdatedAt,
+  );
+
+  return {
+    id: raw.id,
+    slug: raw.slug,
+    headline: raw.headline,
+    summary: raw.summary,
+    category: raw.category as StoryCategory,
+    validity,
+    creatorCount: creatorIds.length,
+    claimCount: storyClaims.length,
+    isEchoChamber: echo.isEchoChamber,
+    echoChamberType: echo.echoChamberType,
+    firstMentionedAt,
+    lastUpdatedAt,
+    trendingScore,
+    _claimIds: raw.claimIds,
+  };
+});
+
+// Index: stories each creator appears in
+const creatorStoryIndex = new Map<string, string[]>();
+for (const story of computedStories) {
+  const storyClaims = story._claimIds
+    .map(id => claimsById.get(id))
+    .filter((c): c is Claim => c != null);
+  const creatorIds = Array.from(new Set(storyClaims.map(c => c.creatorId)));
+  for (const cid of creatorIds) {
+    const list = creatorStoryIndex.get(cid) || [];
+    list.push(story.id);
+    creatorStoryIndex.set(cid, list);
+  }
+}
+
+// ─── Helper: strip internal fields from ComputedStory to Story ──────────────
+
+function toStory(cs: ComputedStory): Story {
+  const { _claimIds, ...story } = cs;
+  return story;
+}
+
+// ─── Helper: build StoryCreator[] for a story ───────────────────────────────
+
+function buildStoryCreators(story: ComputedStory): StoryCreator[] {
+  const storyClaims = story._claimIds
+    .map(id => claimsById.get(id))
+    .filter((c): c is Claim => c != null);
+
+  // Group claims by creator
+  const byCreator = new Map<string, Claim[]>();
+  for (const c of storyClaims) {
+    const list = byCreator.get(c.creatorId) || [];
+    list.push(c);
+    byCreator.set(c.creatorId, list);
+  }
+
+  const result: StoryCreator[] = [];
+  const entries = Array.from(byCreator.entries());
+  for (const [creatorId, creatorClaims] of entries) {
+    const creator = creators.find(c => c.id === creatorId);
+    if (!creator) continue;
+
+    const lean = calculateCreatorLean(creatorClaims);
+    const verifiedCount = creatorClaims.filter((c: Claim) => c.status === 'verified_true').length;
+    const mixedCount = creatorClaims.filter((c: Claim) => c.status === 'partially_true').length;
+    const speculativeCount = creatorClaims.filter((c: Claim) =>
+      ['verified_false', 'unverifiable', 'expired'].includes(c.status)
+    ).length;
+
+    // Get creator-level reliability
+    const allCreatorClaims = claims.filter(c => c.creatorId === creatorId);
+    const reliabilityScore = calculateReliabilityScore(allCreatorClaims);
+    const reliabilityLabel = getReliabilityFromScore(reliabilityScore);
+
+    result.push({
+      creatorId,
+      lean,
+      claimCount: creatorClaims.length,
+      verifiedCount,
+      mixedCount,
+      speculativeCount,
+      creator: {
+        id: creator.id,
+        channelName: creator.channelName,
+        avatarUrl: creator.avatarUrl,
+        reliabilityScore,
+        reliabilityLabel,
+        tier: creator.tier as any,
+      },
+    });
+  }
+
+  return result;
+}
+
+// ─── Helper: build ClaimWithCreator[] for a story ───────────────────────────
+
+function buildStoryClaimsWithCreators(story: ComputedStory): ClaimWithCreator[] {
+  return story._claimIds
+    .map(id => claimsById.get(id))
+    .filter((c): c is Claim => c != null)
+    .map(claim => {
+      const creator = creators.find(cr => cr.id === claim.creatorId);
+      const video = videos.find(v => v.id === claim.videoId);
+      return {
+        id: claim.id,
+        claimText: claim.claimText,
+        category: claim.category,
+        status: claim.status as any,
+        confidenceLanguage: claim.confidenceLanguage as any,
+        statedTimeframe: claim.statedTimeframe,
+        videoTimestampSeconds: claim.videoTimestampSeconds,
+        specificityScore: claim.specificityScore,
+        createdAt: claim.createdAt,
+        verificationDate: claim.verificationDate,
+        verificationNotes: claim.verificationNotes,
+        creator: {
+          id: creator?.id || 'unknown',
+          channelName: creator?.channelName || 'Unknown',
+          avatarUrl: creator?.avatarUrl || null,
+          tier: creator?.tier || 'unranked',
+        },
+        video: {
+          id: video?.id || 'unknown',
+          title: video?.title || 'Unknown Video',
+          youtubeVideoId: video?.youtubeVideoId || '',
+          thumbnailUrl: video?.thumbnailUrl || null,
+        },
+      };
+    });
+}
 
 // ─── Creator queries ──────────────────────────────────────────────────────────
 
@@ -271,5 +465,101 @@ export function getMarketPulse() {
         ...claim,
         creator: creators.find(c => c.id === claim.creatorId)!,
       })),
+  };
+}
+
+// ─── Story queries ──────────────────────────────────────────────────────────
+
+export function getAllStories(): Story[] {
+  return computedStories
+    .map(toStory)
+    .sort((a, b) => b.trendingScore - a.trendingScore);
+}
+
+export function getStoryBySlug(slug: string): StoryDetail | null {
+  const story = computedStories.find(s => s.slug === slug);
+  if (!story) return null;
+
+  return {
+    ...toStory(story),
+    storyCreators: buildStoryCreators(story),
+    claims: buildStoryClaimsWithCreators(story),
+  };
+}
+
+export function getTrendingStories(limit = 10): Story[] {
+  return getAllStories().slice(0, limit);
+}
+
+export function getStoriesByCategory(category: string): Story[] {
+  return computedStories
+    .filter(s => s.category === category)
+    .map(toStory)
+    .sort((a, b) => b.trendingScore - a.trendingScore);
+}
+
+export function getEchoChamberStories(): Story[] {
+  return computedStories
+    .filter(s => s.isEchoChamber)
+    .map(toStory)
+    .sort((a, b) => b.trendingScore - a.trendingScore);
+}
+
+export function getStoriesForCreator(creatorId: string): Story[] {
+  const storyIds = creatorStoryIndex.get(creatorId) || [];
+  return storyIds
+    .map(id => computedStories.find(s => s.id === id))
+    .filter((s): s is ComputedStory => s != null)
+    .map(toStory)
+    .sort((a, b) => b.trendingScore - a.trendingScore);
+}
+
+export function getStoryCount(): number {
+  return computedStories.length;
+}
+
+// ─── Creator profile queries ────────────────────────────────────────────────
+
+export function getCreatorProfile(id: string): CreatorProfile | null {
+  const creator = creators.find(c => c.id === id);
+  if (!creator) return null;
+
+  const creatorClaims = claims.filter(c => c.creatorId === id);
+  const reliabilityScore = calculateReliabilityScore(creatorClaims);
+  const reliabilityLabel = getReliabilityFromScore(reliabilityScore);
+  const typicalLean = calculateCreatorLean(creatorClaims);
+  const validity = calculateValidityBreakdown(creatorClaims);
+  const totalStoriesCovered = (creatorStoryIndex.get(id) || []).length;
+
+  // Category-specific accuracy
+  const catAccuracy = calculateCategoryAccuracy(creatorClaims);
+
+  return {
+    id: creator.id,
+    channelName: creator.channelName,
+    channelHandle: creator.channelHandle || null,
+    channelUrl: creator.channelUrl,
+    avatarUrl: creator.avatarUrl,
+    subscriberCount: creator.subscriberCount,
+    description: creator.description,
+    primaryNiche: creator.primaryNiche,
+    trackingSince: creator.trackingSince,
+    reliabilityScore,
+    reliabilityLabel,
+    typicalLean,
+    validity,
+    totalClaims: creatorClaims.length,
+    totalStoriesCovered,
+    tier: creator.tier as any,
+    rankOverall: creator.rankOverall ?? null,
+    rankChange: creator.rankChange,
+    currentSentiment: creator.currentSentiment as any,
+    currentStance: creator.currentStance || null,
+    priceAccuracy: catAccuracy['price'] ?? 0,
+    timelineAccuracy: catAccuracy['timeline'] ?? 0,
+    regulatoryAccuracy: catAccuracy['regulatory'] ?? 0,
+    partnershipAccuracy: catAccuracy['partnership'] ?? 0,
+    technologyAccuracy: catAccuracy['technology'] ?? 0,
+    marketAccuracy: catAccuracy['market'] ?? 0,
   };
 }
