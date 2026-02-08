@@ -1,5 +1,5 @@
 import { getCreatorsWithProfiles, getMarketPulse, getClaimsWithCreators } from '@/lib/db';
-import { Users, Zap, CheckCircle2, Target, RefreshCw, Flag } from 'lucide-react';
+import { Users, Zap, CheckCircle2, Target, RefreshCw, Flag, ExternalLink, Newspaper } from 'lucide-react';
 import CreatorDirectory from '@/components/CreatorDirectory';
 import ClaimCard from '@/components/ClaimCard';
 
@@ -86,6 +86,30 @@ export default function HomePage() {
 
       {/* Creator Directory (client component with filters) */}
       <CreatorDirectory creators={creators} />
+
+      {/* Confirmd cross-promo */}
+      <a
+        href="https://confirmd-app-production.up.railway.app/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block glass-card p-5 hover:bg-white/[0.04] transition-all group border-l-2 border-cyan-400/40"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-cyan-500/20 flex items-center justify-center flex-shrink-0">
+            <Newspaper className="w-6 h-6 text-cyan-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="text-sm font-semibold text-white">Confirmd</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-400 font-medium border border-cyan-500/20">NEW</span>
+            </div>
+            <p className="text-xs text-white/50">
+              Want verified crypto news instead of hype? Confirmd separates fact from speculation across the entire industry.
+            </p>
+          </div>
+          <ExternalLink className="w-5 h-5 text-white/20 group-hover:text-cyan-400 transition-colors flex-shrink-0" />
+        </div>
+      </a>
 
       {/* Recently Verified Claims - proof section */}
       {recentVerified.length > 0 && (

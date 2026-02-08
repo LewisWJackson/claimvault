@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { BarChart3, Newspaper, Users, Zap, Activity, Trophy, Menu, X, Plus } from 'lucide-react';
+import { BarChart3, Newspaper, Users, Zap, Activity, Trophy, Menu, X, Plus, ExternalLink } from 'lucide-react';
 import clsx from 'clsx';
 
 const navItems = [
@@ -53,6 +53,15 @@ export default function Navigation() {
           </div>
 
           <div className="flex items-center gap-3">
+            <a
+              href="https://confirmd-app-production.up.railway.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20 hover:bg-cyan-500/20 transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="text-xs text-cyan-400 font-medium">Confirmd News</span>
+            </a>
             <Link
               href="/suggest"
               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-500/10 border border-orange-500/20 hover:bg-orange-500/20 transition-colors"
