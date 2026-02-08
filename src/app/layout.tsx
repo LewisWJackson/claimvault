@@ -3,8 +3,8 @@ import './globals.css';
 import Navigation from '@/components/Navigation';
 
 export const metadata: Metadata = {
-  title: 'CreatorClaim — Which Crypto YouTubers Can You Trust?',
-  description: 'Track crypto creator predictions and verify them against reality. See who\'s trustworthy and who\'s speculating.',
+  title: 'CreatorClaim — Which XRP YouTubers Can You Trust?',
+  description: 'Track XRP and crypto creator predictions and verify them against reality. See who\'s trustworthy and who\'s speculating.',
   keywords: ['XRP', 'crypto', 'YouTube', 'predictions', 'accuracy', 'accountability'],
 };
 

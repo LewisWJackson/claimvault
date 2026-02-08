@@ -105,7 +105,10 @@ export default function ClaimCard({ claim, index = 0, showCreator = true }: Clai
         </div>
       )}
 
-      <DisputeButton claimId={claim.id} />
+      <div className="mt-2 flex items-center justify-between">
+        <DisputeButton claimId={claim.id} />
+        <span className="text-[10px] text-white/15 italic">Think this is wrong? Challenge it</span>
+      </div>
 
       {/* Video source with embedded player */}
       {claim.video && videoId && (

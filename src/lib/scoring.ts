@@ -19,26 +19,35 @@ export function calculateTier(accuracy: number, totalScored: number): Tier {
 }
 
 // ─── Calculate category-specific accuracy ───────────────────────────────────
+// Map display categories to actual seed.ts category values
+const CATEGORY_GROUPS: Record<string, string[]> = {
+  price: ['price_prediction'],
+  technical: ['technical_analysis'],
+  regulatory: ['regulatory', 'etf_approval'],
+  partnership: ['partnership', 'partnership_adoption'],
+  technology: ['technology'],
+  market: ['market_analysis', 'market_prediction'],
+};
+
 export function calculateCategoryAccuracy(
   claims: Array<{ category: string; status: string }>
 ): Record<string, number> {
-  const categories = ['price', 'timeline', 'regulatory', 'partnership', 'technology', 'market'];
   const result: Record<string, number> = {};
 
-  for (const cat of categories) {
-    const catClaims = claims.filter(c => c.category === cat);
+  for (const [displayCat, seedCats] of Object.entries(CATEGORY_GROUPS)) {
+    const catClaims = claims.filter(c => seedCats.includes(c.category));
     const scored = catClaims.filter(c =>
       ['verified_true', 'verified_false', 'partially_true'].includes(c.status)
     );
 
     if (scored.length === 0) {
-      result[cat] = 0;
+      result[displayCat] = 0;
       continue;
     }
 
     const trueCount = scored.filter(c => c.status === 'verified_true').length;
     const partialCount = scored.filter(c => c.status === 'partially_true').length;
-    result[cat] = Math.round(((trueCount + partialCount * 0.5) / scored.length) * 100);
+    result[displayCat] = Math.round(((trueCount + partialCount * 0.5) / scored.length) * 100);
   }
 
   return result;

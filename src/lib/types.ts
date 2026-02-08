@@ -87,7 +87,7 @@ export interface CreatorProfile {
   currentSentiment: Sentiment;
   currentStance: string | null;
   priceAccuracy: number;
-  timelineAccuracy: number;
+  technicalAccuracy: number;
   regulatoryAccuracy: number;
   partnershipAccuracy: number;
   technologyAccuracy: number;

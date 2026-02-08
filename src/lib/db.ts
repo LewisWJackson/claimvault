@@ -566,7 +566,7 @@ export function getCreatorProfile(id: string): CreatorProfile | null {
     currentSentiment: creator.currentSentiment as any,
     currentStance: creator.currentStance || null,
     priceAccuracy: catAccuracy['price'] ?? 0,
-    timelineAccuracy: catAccuracy['timeline'] ?? 0,
+    technicalAccuracy: catAccuracy['technical'] ?? 0,
     regulatoryAccuracy: catAccuracy['regulatory'] ?? 0,
     partnershipAccuracy: catAccuracy['partnership'] ?? 0,
     technologyAccuracy: catAccuracy['technology'] ?? 0,

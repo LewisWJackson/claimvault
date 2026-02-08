@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { BarChart3, Newspaper, Users, Zap, Activity, Menu, X } from 'lucide-react';
+import { BarChart3, Newspaper, Users, Zap, Activity, Trophy, Menu, X, Plus } from 'lucide-react';
 import clsx from 'clsx';
 
 const navItems = [
   { href: '/', label: 'Creators', icon: Users },
+  { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   { href: '/claims', label: 'Claims', icon: Zap },
   { href: '/stories', label: 'Stories', icon: Newspaper },
   { href: '/pulse', label: 'Pulse', icon: Activity },
@@ -52,10 +53,13 @@ export default function Navigation() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06]">
-              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs text-white/50">Tracking <span className="text-white font-medium">XRP</span></span>
-            </div>
+            <Link
+              href="/suggest"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-500/10 border border-orange-500/20 hover:bg-orange-500/20 transition-colors"
+            >
+              <Plus className="w-3.5 h-3.5 text-orange-400" />
+              <span className="text-xs text-orange-400 font-medium">Suggest Creator</span>
+            </Link>
             <button
               className="md:hidden p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/[0.06] transition-all"
               onClick={() => setMobileOpen(!mobileOpen)}

@@ -1,5 +1,5 @@
 import { getCreatorsWithProfiles, getMarketPulse, getClaimsWithCreators } from '@/lib/db';
-import { Users, Zap, CheckCircle2, Target } from 'lucide-react';
+import { Users, Zap, CheckCircle2, Target, RefreshCw, Flag } from 'lucide-react';
 import CreatorDirectory from '@/components/CreatorDirectory';
 import ClaimCard from '@/components/ClaimCard';
 
@@ -21,10 +21,10 @@ export default function HomePage() {
       {/* Hero */}
       <section className="text-center py-10 sm:py-14">
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-3">
-          Which Crypto YouTubers Can You <span className="gradient-text">Actually Trust</span>?
+          Which XRP YouTubers Can You <span className="gradient-text">Actually Trust</span>?
         </h1>
         <p className="text-base text-white/40 max-w-2xl mx-auto">
-          We track {pulse.totalClaims} claims from {pulse.totalCreators} creators and verify them against reality. See who&apos;s right, who&apos;s wrong, and who&apos;s just guessing.
+          We track {pulse.totalClaims} claims from {pulse.totalCreators} XRP-focused creators and verify them against reality. See who&apos;s right, who&apos;s wrong, and who&apos;s just guessing.
         </p>
       </section>
 
@@ -67,6 +67,20 @@ export default function HomePage() {
               <div className="text-xl font-semibold text-cyan-400">{pulse.verifiedTrue}</div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Verification improving banner */}
+      <section className="glass-card-sm p-4 flex items-start sm:items-center gap-3 border-l-2 border-orange-400/40">
+        <RefreshCw className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5 sm:mt-0" />
+        <div className="flex-1">
+          <p className="text-sm text-white/70">
+            Our AI verification is <span className="text-orange-400 font-medium">continually improving</span>. See a claim that&apos;s wrong?
+          </p>
+          <p className="text-xs text-white/40 mt-0.5">
+            <Flag className="w-3 h-3 inline mr-1" />
+            Hit <span className="text-white/60 font-medium">&ldquo;Challenge this claim&rdquo;</span> on any claim to help improve our accuracy. Every challenge makes the system smarter.
+          </p>
         </div>
       </section>
 

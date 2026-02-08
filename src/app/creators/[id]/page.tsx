@@ -217,7 +217,7 @@ export default function CreatorProfilePage() {
 
   const radarData = [
     { category: 'Price', value: profile.priceAccuracy, fullMark: 100 },
-    { category: 'Timeline', value: profile.timelineAccuracy, fullMark: 100 },
+    { category: 'Technical', value: profile.technicalAccuracy, fullMark: 100 },
     { category: 'Regulatory', value: profile.regulatoryAccuracy, fullMark: 100 },
     { category: 'Partnership', value: profile.partnershipAccuracy, fullMark: 100 },
     { category: 'Technology', value: profile.technologyAccuracy, fullMark: 100 },
@@ -226,7 +226,7 @@ export default function CreatorProfilePage() {
 
   const categories = [
     { name: 'Price', key: 'price', score: profile.priceAccuracy, color: '#f97316' },
-    { name: 'Timeline', key: 'timeline', score: profile.timelineAccuracy, color: '#a855f7' },
+    { name: 'Technical', key: 'technical', score: profile.technicalAccuracy, color: '#a855f7' },
     { name: 'Regulatory', key: 'regulatory', score: profile.regulatoryAccuracy, color: '#3b82f6' },
     { name: 'Partners', key: 'partnership', score: profile.partnershipAccuracy, color: '#06b6d4' },
     { name: 'Tech', key: 'technology', score: profile.technologyAccuracy, color: '#22c55e' },

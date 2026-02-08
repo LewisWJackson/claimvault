@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { Flag, Loader2, ChevronDown, Send, ShieldCheck, ShieldAlert, ShieldQuestion } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type DisputeType = 'never_said' | 'misquoted' | 'out_of_context' | 'wrong_creator';
+type DisputeType = 'wrong_verdict' | 'never_said' | 'misquoted' | 'out_of_context' | 'wrong_creator';
 
 const disputeTypes: { value: DisputeType; label: string; description: string }[] = [
+  { value: 'wrong_verdict', label: 'Wrong Verdict', description: 'The verification result is incorrect' },
   { value: 'never_said', label: 'Never Said This', description: 'The creator never made this claim' },
   { value: 'misquoted', label: 'Misquoted', description: 'The claim is inaccurately paraphrased' },
   { value: 'out_of_context', label: 'Out of Context', description: 'The claim is missing important context' },
